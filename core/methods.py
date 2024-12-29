@@ -133,6 +133,47 @@ def preprop_resid(dfr, dfg, pdict):
     
     return ret
 
+def charging_station_search_by_postal_code(dframe2):
+    # Streamlit sidebar with search button for postal code
+    st.sidebar.markdown("### Search Charging Stations by Postal Code")
+    
+    # Input field for the postal code (PLZ)
+    postal_code = st.sidebar.text_input("Enter Postal Code (PLZ)", "")
+    
+    # Button to trigger the search
+    search_button = st.sidebar.button("Search")
+    
+    # Initialize map object
+    m = folium.Map(location=[52.52, 13.40], zoom_start=10)  # Example center, adjust as needed
+    
+    if search_button and postal_code:
+        # Filter charging stations based on the postal code entered
+        filtered_stations = dframe2[dframe2['PLZ'] == int(postal_code)]
+        
+        if not filtered_stations.empty:
+            # Loop through the filtered stations and add them to the map
+            for idx, row in filtered_stations.iterrows():
+                # Determine availability status (assuming 'Availability' column exists)
+                availability = row['Availability'] if 'Availability' in row else 'Unknown'
+                
+                # Set color based on availability
+                color = 'green' if availability == 'Available' else 'red'
+                status_text = 'Available' if availability == 'Available' else 'Not Available'
+                
+                # Add marker for each station
+                folium.Marker(
+                    location=[float(row['Breitengrad']), float(row['Längengrad'])],
+                    popup=f"Station: {row.get('Station_Name', 'Unknown')}<br>Status: {status_text}",
+                    icon=folium.Icon(color=color)
+                ).add_to(m)
+            
+            # Display the map with the charging stations
+            folium_static(m, width=800, height=600)
+        else:
+            st.write("No charging stations found for this postal code.")
+    else:
+        st.write("Enter a postal code and click 'Search' to find charging stations.")
+
 
 # -----------------------------------------------------------------------------
 @ht.timer
@@ -142,10 +183,12 @@ def make_streamlit_electric_Charging_resid(dfr1, dfr2):
     dframe1 = dfr1.copy()
     dframe2 = dfr2.copy()
 
+    charging_station_search_by_postal_code(dframe2)
 
     # Streamlit app
     st.title('Heatmaps: Electric Charging Stations and Residents')
 
+    
     # Create a radio button for layer selection
     # layer_selection = st.radio("Select Layer", ("Number of Residents per PLZ (Postal code)", "Number of Charging Stations per PLZ (Postal code)"))
 
