@@ -5,9 +5,7 @@ from charging.application.services.Search import PostalCodeSearch
 import sys
 import os
 from config import pdict
-#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 
 @pytest.fixture
 def dframe1():
@@ -22,12 +20,6 @@ def dframe2():
     return df2.rename(columns={'Postleitzahl': 'PLZ'})
     
 # Test for valid postal code
-'''def test_filter_data_valid_postal_code(dframe1, dframe2):
-    search = PostalCodeSearch()
-    search.charging_station_search_by_postal_code(dframe1, dframe2)
-    data = search.filter_data_by_postal_code(10115)
-    assert data['merged_data'].shape[0] > 0  # Check if data is not empty
-    assert 'geometry' in data['filtered_dframe2'].columns  # Check if geo data exists'''
 def test_filter_data_valid_postal_code(dframe1, dframe2):
     """
     Test the valid postal code filtering with the PostalCodeSearch service.

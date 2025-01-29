@@ -5,8 +5,6 @@ from streamlit_folium import folium_static
 from branca.colormap import LinearColormap
 from typing import Any, Dict, List
 import logging
-import pytest
-
 # SOLID Refactor
 
 class MapGenerator:
