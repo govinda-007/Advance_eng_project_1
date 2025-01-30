@@ -5,6 +5,7 @@ from streamlit_folium import folium_static
 from branca.colormap import LinearColormap
 from typing import Any, Dict, List
 import logging
+
 # SOLID Refactor
 
 class MapGenerator:
@@ -151,11 +152,11 @@ class SearchService:
             logging.info(f"Searching for postal code: {postal_code}")
             
             # Normalize the postal codes in the dataframe
-            self.df_lstat["PLZ"] = self.df_lstat["PLZ"].fillna(0).astype(float).astype(int)
-            logging.info(f"Unique postal codes in the dataset: {self.df_lstat['PLZ'].unique()}")
+            self.df_lstat["Postleitzahl"] = self.df_lstat["Postleitzahl"].fillna(0).astype(float).astype(int)
+            logging.info(f"Unique postal codes in the dataset: {self.df_lstat['Postleitzahl'].unique()}")
 
             # Filter the dataframe for the given postal code
-            filtered_df = self.df_lstat[self.df_lstat["PLZ"] == postal_code]
+            filtered_df = self.df_lstat[self.df_lstat["Postleitzahl"] == postal_code]
             logging.info(f"Filtered dataframe:\n{filtered_df}")
 
             # Prepare the list of stations
@@ -165,7 +166,7 @@ class SearchService:
                     lat = float(str(row["Breitengrad"]).replace(',', '.'))
                     lon = float(str(row["Längengrad"]).replace(',', '.'))
                     stations.append({
-                        # "name": row["Anzeigename (Karte)"],
+                        "name": row["Anzeigename (Karte)"],
                         "status": "Available",  # Assuming default status as "Available"
                         "location": (lat, lon),
                     })

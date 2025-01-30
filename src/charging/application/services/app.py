@@ -14,7 +14,8 @@ from charging.application.services.Suggestion import SuggestionManager,Suggestio
 class Application:
     """Main application class to coordinate all services"""
 
-    def __init__(self, dframe1, dframe2):
+    def __init__(self, l_stat, dframe1, dframe2):
+        self.l_stat = l_stat
         self.dframe1 = dframe1.copy()
         self.dframe2 = dframe2.copy()
         self.search_service = Search()
@@ -43,7 +44,7 @@ class Application:
         choice = st.sidebar.selectbox("Menu", menu)
 
         if choice == "Search Charging Stations":
-            self.search_service.search_by_postal_code(self.dframe2)
+            self.search_service.search_by_postal_code(self.l_stat)
         elif choice == "Suggest a New Location":
             self.suggestion_service.display_suggestions_page()
         elif choice == "Vote on Suggestions":
@@ -54,11 +55,13 @@ class Application:
 class Search:
     """Handles searching of charging stations"""
 
-    def search_by_postal_code(self, dframe2):
+    def search_by_postal_code(self, l_stat):
+        # print("l_stat:", l_stat)
         st.sidebar.markdown("### Search Charging Stations by Postal Code")
         postal_code = st.sidebar.text_input("Enter Postal Code (PLZ)", "")
         search_button = st.sidebar.button("Search")
-        search_service = SearchService(dframe2)
+        search_service = SearchService(l_stat)
+        print('searchService', search_service)
 
         if postal_code:
             st.write(f"Searching for postal code: {postal_code}")
@@ -74,9 +77,9 @@ class Search:
                 for station in stations:
                     folium.Marker(
                         location=station["location"],
-                #      popup=f"{station['name']} ({station['status']})",
-                        popup=f"Is ready for you)",
-                        # popup=f"{station['name']} Is ready for you)",
+                        # popup=f"{station['name']} ({station['status']})",
+                        # popup=f"Is ready for you)",
+                        popup=f"{station['name']} Is ready for you)",
                         # icon=folium.Icon(color="green" if station["status"] == "available" else "red"),
                     ).add_to(m)
                 st_folium(m, width=700, height=500)

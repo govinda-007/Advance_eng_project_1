@@ -79,7 +79,7 @@ class ApplicationManager:
 
         # Launch the Streamlit app
         print("Launching Streamlit app...")
-        app_instance = app(gdf_charging_stations, gdf_residents)
+        app_instance = app(df_charging_stations, gdf_charging_stations, gdf_residents)
         app_instance.run()
         print("Streamlit app running.")
 
