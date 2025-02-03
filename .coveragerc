@@ -1,0 +1,8 @@
+[coverage:run]
+omit =
+    src/config.py
+    src/main.py
+    src\charging\application\services\Search.py  
+    src\charging\application\services\Suggestion.py      
+    src\charging\application\services\Visualize.py   
+    src\charging\application\services\__init__.py  

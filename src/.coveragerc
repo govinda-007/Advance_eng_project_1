@@ -1,0 +1,5 @@
+[coverage:run]
+# Exclude files or directories from the coverage report
+omit =
+    src\config.py                           
+    src\main.py 
